@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ariella's 17th Birthday VIP Invite & Quiz ✨</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-blush: #FAF4F5;
+      --card-cream: #FFFDFD;
+      --rose-primary: #A85568;
+      --rose-deep: #7D3648;
+      --rose-soft: #F7E8EC;
+      --border-rose: #E5DADA;
+      --ink-dark: #3B282C;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top, #FFF7F9 0%, #F5E6EA 100%);
+      color: var(--ink-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .font-serif-display {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(3deg); }
+    }
+
+    @keyframes spinVinyl {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.95) translateY(8px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .animate-float {
+      animation: floatSlow 4s ease-in-out infinite;
+    }
+
+    .vinyl-spin {
+      animation: spinVinyl 7s linear infinite;
+    }
+
+    .vinyl-paused {
+      animation-play-state: paused;
+    }
+
+    .card-enter {
+      animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Disco Shimmer Strip */
+    .disco-strip {
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.18) 1px, transparent 1px),
+        linear-gradient(135deg, #D98A9E 0%, #A85568 50%, #873B4E 100%);
+      background-size: 10px 10px, 10px 10px, 100% 100%;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FAF4F5;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #DFC4CA;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center p-3 sm:p-6 selection:bg-[#F7E8EC] selection:text-[#7D3648]">
+
+  <!-- ========================================================================= -->
+  <!-- TOP TOAST NOTIFICATION BANNER                                             -->
+  <!-- ========================================================================= -->
+  <div id="toastBanner" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden max-w-[92vw] sm:max-w-md px-4 py-2.5 rounded-2xl bg-[#3B282C] text-white text-xs sm:text-sm font-semibold shadow-xl border border-white/15 text-center transition-all duration-300">
+    Notification
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- LIVE NEW-REQUEST POP-UP MODAL FOR HOST                                    -->
+  <!-- ========================================================================= -->
+  <div id="hostLiveRequestModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+    <div class="w-full max-w-md rounded-3xl bg-white border-2 border-[#E5DADA] shadow-2xl p-5 sm:p-6 card-enter">
+      <div class="flex items-center justify-between mb-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold uppercase tracking-wider">
+          🔔 New VIP Request!
+        </span>
+        <button type="button" onclick="closeHostLiveRequestModal()" class="text-stone-400 hover:text-stone-700 text-lg font-bold px-2">✕</button>
+      </div>
+      <h3 id="liveReqGuestName" class="font-serif-display text-3xl font-bold text-[#7D3648] mb-1">Guest Name</h3>
+      <p id="liveReqSummary" class="text-xs sm:text-sm text-stone-600 bg-[#FAF4F5] border border-[#E5DADA] rounded-2xl p-3 mb-4 leading-relaxed">
+        Quiz answers summary...
+      </p>
+      <div class="grid grid-cols-2 gap-2.5">
+        <button type="button" id="liveReqAcceptBtn" class="py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition active:scale-95">
+          ✅ Accept Guest
+        </button>
+        <button type="button" id="liveReqRefuseBtn" class="py-3 px-4 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-md transition active:scale-95">
+          ❌ Refuse Guest
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- TOP HOST ADMIN BAR (VISIBLE ONLY WHEN UNLOCKED AS HOST)                   -->
+  <!-- ========================================================================= -->
+  <div id="hostAdminBar" class="hidden w-full max-w-[520px] flex-wrap items-center justify-between gap-2 mb-3.5 px-3 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-[#E5DADA] shadow-sm z-30">
+    <div class="flex items-center gap-2 text-xs font-bold text-[#A85568]">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span>👑 Host Mode</span>
+      <span id="sandboxBadge" class="hidden px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold">PREVIEW SANDBOX</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-1.5">
+      <button type="button" onclick="showHostCommandCenter()" class="px-2.5 py-1.5 rounded-xl bg-[#A85568] text-white text-[11px] font-bold hover:bg-[#8E4355] transition">
+        📊 RSVPs (<span id="hostTopPendingCount">0</span>)
+      </button>
+      <button type="button" onclick="openAddRsvpModal()" class="px-2.5 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-700 transition">
+        ➕ Add RSVP
+      </button>
+      <button type="button" onclick="openSettingsModal()" class="px-2.5 py-1.5 rounded-xl bg-[#FAF4F5] border border-[#E5DADA] text-[#7D3648] text-[11px] font-bold hover:bg-[#F7E8EC] transition">
+        ⚙️ Edit
+      </button>
+      <button type="button" onclick="copyGuestLink()" class="px-2.5 py-1.5 rounded-xl bg-[#FAF4F5] border border-[#E5DADA] text-stone-700 text-[11px] font-bold hover:bg-stone-100 transition" title="Copy clean Guest Link">
+        🔗 Guest Link
+      </button>
+      <button type="button" onclick="copyHostLink()" class="px-2.5 py-1.5 rounded-xl bg-[#FAF4F5] border border-[#E5DADA] text-stone-700 text-[11px] font-bold hover:bg-stone-100 transition" title="Copy Host Link">
+        🔖 Host Link
+      </button>
+      <button type="button" onclick="lockHostMode()" class="px-2.5 py-1.5 rounded-xl bg-stone-800 text-white text-[11px] font-bold hover:bg-stone-900 transition" title="Lock Host Mode">
+        🔒
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- DEDICATED HOST COMMAND CENTER (VISIBLE IN HOST MODE)                      -->
+  <!-- ========================================================================= -->
+  <section id="hostCommandCenter" class="hidden w-full max-w-[520px] rounded-[28px] bg-white/95 backdrop-blur-md border-2 border-[#E5DADA] shadow-xl p-5 sm:p-6 mb-4 card-enter">
+    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-[#F2E6E9]">
+      <div>
+        <span class="text-[11px] font-extrabold uppercase tracking-widest text-[#A85568]">Host Command Center</span>
+        <h2 class="font-serif-display text-3xl font-bold text-[#3B282C]">Guest List & Requests</h2>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button type="button" onclick="enableHostPhoneAlerts()" id="hostAlertToggleBtn" class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold hover:bg-amber-100 transition">
+          🔔 Alerts
+        </button>
+        <button type="button" onclick="syncAllCloudSources(true)" class="px-3 py-1.5 rounded-xl bg-[#FAF4F5] border border-[#E5DADA] text-[#7D3648] text-xs font-bold hover:bg-[#F7E8EC] transition">
+          🔄 Sync
+        </button>
+        <button type="button" onclick="previewGuestExperience()" class="px-3 py-1.5 rounded-xl bg-stone-100 text-stone-700 text-xs font-bold hover:bg-stone-200 transition">
+          👀 Invite View
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-4 gap-2 mb-4 text-center">
+      <div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-200">
+        <div id="statPending" class="text-lg font-extrabold text-amber-700">0</div>
+        <div class="text-[10px] font-bold uppercase text-amber-800">Pending</div>
+      </div>
+      <div class="p-2.5 rounded-2xl bg-emerald-50 border border-emerald-200">
+        <div id="statConfirmed" class="text-lg font-extrabold text-emerald-700">0</div>
+        <div class="text-[10px] font-bold uppercase text-emerald-800">Confirmed</div>
+      </div>
+      <div class="p-2.5 rounded-2xl bg-rose-50 border border-rose-200">
+        <div id="statDeclined" class="text-lg font-extrabold text-rose-700">0</div>
+        <div class="text-[10px] font-bold uppercase text-rose-800">Declined</div>
+      </div>
+      <div class="p-2.5 rounded-2xl bg-[#FAF4F5] border border-[#E5DADA]">
+        <div id="statHeadcount" class="text-lg font-extrabold text-[#7D3648]">0</div>
+        <div class="text-[10px] font-bold uppercase text-[#A85568]">Headcount</div>
+      </div>
+    </div>
+
+    <!-- Search, Filter & Quick Actions -->
+    <div class="flex flex-wrap items-center gap-2 mb-3">
+      <input id="resultsSearchInput" type="text" oninput="renderHostRsvpList()" placeholder="Search guest name..." class="flex-1 min-w-[140px] px-3.5 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA] text-xs font-medium focus:outline-none focus:border-[#A85568]" />
+      <select id="resultsStatusFilter" onchange="renderHostRsvpList()" class="px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA] text-xs font-bold text-[#7D3648] focus:outline-none">
+        <option value="all">All Guests</option>
+        <option value="pending">⏳ Pending Only</option>
+        <option value="confirmed">✅ Confirmed</option>
+        <option value="declined">❌ Declined</option>
+      </select>
+      <button type="button" onclick="openAddRsvpModal()" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition">
+        ➕ Add RSVP
+      </button>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 text-[11px]">
+      <span id="syncStatusLabel" class="text-stone-500 font-medium">Synced & ready</span>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="copyResultsSummary()" class="font-bold text-[#A85568] hover:underline">📋 Copy Summary</button>
+        <button type="button" onclick="downloadResultsCsv()" class="font-bold text-[#A85568] hover:underline">📥 Export CSV</button>
+      </div>
+    </div>
+
+    <!-- Guest Cards Container -->
+    <div id="hostRsvpListContainer" class="space-y-3 max-h-[56vh] overflow-y-auto pr-1">
+      <div class="text-center py-8 text-xs text-stone-400">Loading guest responses...</div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- PART 1: GUEST LANDING & INTERACTIVE QUIZ FLOW                             -->
+  <!-- ========================================================================= -->
+  <main id="part1QuizSection" class="w-full max-w-[440px]">
+
+    <!-- SCREEN 1: LANDING CARD -->
+    <section id="screenLanding" class="rounded-[30px] bg-white/95 backdrop-blur-md border-2 border-[#E5DADA] shadow-2xl p-6 sm:p-8 text-center card-enter relative overflow-hidden">
+      <!-- Date & Time Pill -->
+      <div class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FAF4F5] border border-[#E5DADA] text-[11px] sm:text-xs font-bold text-[#7D3648] mb-4 shadow-2xs">
+        <span>📅</span>
+        <span id="quizDatePreview">Saturday, November 21, 2026 • 15.00 PM - onwards</span>
+      </div>
+
+      <!-- Portrait Frame with Secret Triple-Tap Disco Ball -->
+      <div class="relative w-32 h-32 sm:w-36 sm:h-36 mx-auto mb-4">
+        <div class="w-full h-full rounded-full p-1.5 bg-gradient-to-tr from-[#E5A4B4] via-[#F7E8EC] to-[#A85568] shadow-lg">
+          <img
+            id="landingPortraitImg"
+            src="baby pic.jpg"
+            onerror="this.onerror=null;this.src='https://placehold.co/300x300/F7E8EC/7D3648?text=Ariella+17';"
+            alt="Ariella"
+            class="w-full h-full object-cover rounded-full border-2 border-white"
+          />
+        </div>
+        <button
+          type="button"
+          id="secretDiscoBtn"
+          onclick="handleSecretDiscoTap()"
+          title="✨"
+          class="absolute -bottom-1 -right-1 w-10 h-10 rounded-full bg-white border border-[#E5DADA] shadow-md flex items-center justify-center text-xl animate-float select-none active:scale-90 transition"
+        >
+          🪩
+        </button>
+      </div>
+
+      <span class="inline-block text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#A85568] mb-1">
+        Official Birthday Invite
+      </span>
+      <h1 class="font-serif-display text-3xl sm:text-4xl font-bold text-[#3B282C] leading-tight mb-2">
+        Are you coming to my birthday party? 🎂
+      </h1>
+      <p class="text-xs sm:text-sm text-stone-500 mb-5 leading-relaxed">
+        Enter your name below to unlock the quick 4-question VIP vibe check & claim your official invitation pass!
+      </p>
+
+      <!-- Guest Name Input -->
+      <div class="mb-4 text-left">
+        <label for="guestNameInput" class="block text-[11px] font-extrabold uppercase tracking-wider text-[#7D3648] mb-1.5 ml-1">
+          Your Full Name
+        </label>
+        <input
+          id="guestNameInput"
+          type="text"
+          placeholder="Type your name here..."
+          autocomplete="name"
+          class="w-full px-4 py-3.5 rounded-2xl bg-[#FAF4F5] border-2 border-[#E5DADA] text-sm font-semibold text-[#3B282C] placeholder:text-stone-400 focus:outline-none focus:border-[#A85568] transition"
+        />
+      </div>
+
+      <!-- YES / NO Buttons -->
+      <div class="relative flex flex-col sm:flex-row items-center justify-center gap-3 mt-2 min-h-[56px]">
+        <button
+          type="button"
+          onclick="handleLandingYes()"
+          class="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#A85568] to-[#8C3D50] hover:from-[#964659] hover:to-[#783142] text-white font-extrabold text-sm tracking-wide shadow-lg shadow-[#A85568]/25 transition active:scale-95"
+        >
+          YES, COUNT ME IN! ✨
+        </button>
+
+        <button
+          type="button"
+          id="dodgingNoBtn"
+          onmouseenter="handleNoButtonHover(event)"
+          ontouchstart="handleNoButtonTouch(event)"
+          onclick="handleNoButtonClick(event)"
+          class="w-full sm:w-auto py-3.5 px-6 rounded-2xl bg-[#FAF4F5] hover:bg-stone-100 border-2 border-[#E5DADA] text-stone-600 font-bold text-sm transition-transform duration-200 select-none"
+        >
+          NO
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: ALREADY INVITED / RETURNING GUEST -->
+    <section id="screenAlreadyInvited" class="hidden rounded-[30px] bg-white/95 backdrop-blur-md border-2 border-[#E5DADA] shadow-2xl p-6 sm:p-8 text-center card-enter">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-3xl">
+        💌
+      </div>
+      <h2 id="alreadyInvitedHeadline" class="font-serif-display text-3xl font-bold text-[#7D3648] mb-2">
+        You were already invited!
+      </h2>
+      <p id="alreadyInvitedSubtext" class="text-xs sm:text-sm text-stone-600 mb-6 leading-relaxed">
+        We already have your RSVP saved! Tap below to open your VIP invitation card and save it to your phone.
+      </p>
+      <button
+        type="button"
+        id="alreadyInvitedActionBtn"
+        onclick="openEnvelopeFromApproved()"
+        class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#A85568] to-[#8C3D50] text-white font-extrabold text-sm shadow-lg transition active:scale-95 mb-2.5"
+      >
+        🎟️ Open My VIP Invitation
+      </button>
+      <button
+        type="button"
+        onclick="resetToLanding()"
+        class="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-stone-500 hover:text-[#7D3648]"
+      >
+        ← Not you? Go back
+      </button>
+    </section>
+
+    <!-- SCREEN 3: 4-QUESTION VIBE QUIZ -->
+    <section id="screenQuiz" class="hidden rounded-[30px] bg-white/95 backdrop-blur-md border-2 border-[#E5DADA] shadow-2xl p-6 sm:p-8 card-enter">
+      <div class="flex items-center justify-between mb-3">
+        <span id="quizStepLabel" class="text-[11px] font-extrabold uppercase tracking-widest text-[#A85568]">
+          Question 1 of 4
+        </span>
+        <span id="quizGuestBadge" class="px-2.5 py-0.5 rounded-full bg-[#FAF4F5] border border-[#E5DADA] text-[11px] font-bold text-[#7D3648]">
+          VIP Guest
+        </span>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="w-full h-2 rounded-full bg-[#F5E6EA] overflow-hidden mb-6">
+        <div id="quizProgressBar" class="h-full bg-gradient-to-r from-[#D98A9E] to-[#A85568] transition-all duration-300" style="width: 25%"></div>
+      </div>
+
+      <h2 id="quizQuestionText" class="font-serif-display text-2xl sm:text-3xl font-bold text-[#3B282C] mb-5 leading-snug">
+        Question text goes here
+      </h2>
+
+      <!-- Options Container -->
+      <div id="quizOptionsContainer" class="space-y-2.5 mb-4"></div>
+
+      <!-- Optional +1 Name Input -->
+      <div id="plusOneNameBox" class="hidden mt-3 p-3.5 rounded-2xl bg-[#FAF4F5] border border-[#E5DADA]">
+        <label for="plusOneNameInput" class="block text-[11px] font-extrabold uppercase tracking-wider text-[#7D3648] mb-1">
+          Who is your +1? (Optional)
+        </label>
+        <input
+          id="plusOneNameInput"
+          type="text"
+          placeholder="Enter your +1's name..."
+          class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E5DADA] text-xs sm:text-sm font-semibold focus:outline-none focus:border-[#A85568]"
+        />
+        <button
+          type="button"
+          onclick="confirmPlusOneAndAdvance()"
+          class="w-full mt-2.5 py-2.5 px-4 rounded-xl bg-[#A85568] text-white text-xs font-extrabold hover:bg-[#8E4355] transition"
+        >
+          Continue →
+        </button>
+      </div>
+
+      <div class="flex items-center justify-between mt-4 pt-3 border-t border-[#F5E6EA]">
+        <button type="button" onclick="prevQuizQuestion()" id="quizBackBtn" class="text-xs font-bold text-stone-500 hover:text-[#7D3648]">
+          ← Back
+        </button>
+        <span class="text-[11px] text-stone-400">Ariella's 17th VIP Check ✨</span>
+      </div>
+    </section>
+
+    <!-- SCREEN 4: WAITING FOR HOST APPROVAL -->
+    <section id="screenPendingApproval" class="hidden rounded-[30px] bg-white/95 backdrop-blur-md border-2 border-[#E5DADA] shadow-2xl p-6 sm:p-8 text-center card-enter">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-3xl animate-pulse">
+        ⏳
+      </div>
+      <span class="inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-[11px] font-extrabold uppercase tracking-wider mb-2">
+        Request Sent to Host
+      </span>
+      <h2 class="font-serif-display text-3xl font-bold text-[#3B282C] mb-2">
+        Your invitation request was sent to the host!
+      </h2>
+      <p class="text-xs sm:text-sm text-stone-600 mb-5 leading-relaxed">
+        Please wait for their response, <strong id="pendingGuestNameLabel" class="text-[#7D3648]">Guest</strong>! As soon as Ariella approves your request, your VIP invitation pass will unlock right here.
+      </p>
+
+      <div class="space-y-2.5">
+        <button
+          type="button"
+          id="enableGuestNotifyBtn"
+          onclick="enableGuestPhoneNotification()"
+          class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-[#A85568] to-[#8C3D50] text-white font-extrabold text-xs sm:text-sm shadow-lg transition active:scale-95"
+        >
+          🔔 Notify My Phone When Accepted
+        </button>
+        <button
+          type="button"
+          onclick="checkPendingGuestStatusNow(true)"
+          class="w-full py-3 px-5 rounded-2xl bg-[#FAF4F5] hover:bg-[#F7E8EC] border border-[#E5DADA] text-[#7D3648] font-bold text-xs transition"
+        >
+          🔄 Check Host Response Now
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 5: HOST APPROVED -> YOU'RE INVITED! -->
+    <section id="screenApproved" class="hidden rounded-[30px] bg-white/95 backdrop-blur-md border-2 border-[#E5DADA] shadow-2xl p-6 sm:p-8 text-center card-enter">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-3xl">
+        🎉
+      </div>
+      <span class="inline-block px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-extrabold uppercase tracking-wider mb-2">
+        Host Approved • VIP Unlocked
+      </span>
+      <h2 class="font-serif-display text-3xl sm:text-4xl font-bold text-[#7D3648] mb-2">
+        You passed! You're invited! ✨
+      </h2>
+      <p class="text-xs sm:text-sm text-stone-600 mb-6 leading-relaxed">
+        Yay, your VIP spot on the guest list is officially locked in! 🪩✨<br />
+        Bring your best energy, get ready for the dancefloor, and we are so excited to celebrate with you❤️.
+      </p>
+      <button
+        type="button"
+        onclick="openEnvelopeFromApproved()"
+        class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#A85568] to-[#8C3D50] hover:from-[#964659] hover:to-[#783142] text-white font-extrabold text-sm tracking-wide shadow-xl shadow-[#A85568]/30 transition active:scale-95"
+      >
+        💌 Open My Official VIP Invitation
+      </button>
+    </section>
+
+    <!-- SCREEN 6: DECLINED / REFUSED SCREEN -->
+    <section id="screenDeclined" class="hidden rounded-[30px] bg-white/95 backdrop-blur-md border-2 border-[#E5DADA] shadow-2xl p-6 sm:p-8 text-center card-enter">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center text-3xl">
+        🧸
+      </div>
+      <h2 id="declinedHeadline" class="font-serif-display text-3xl font-bold text-[#7D3648] mb-3">
+        We'll Miss You on the Dancefloor 💕
+      </h2>
+      <p id="declinedBodyText" class="text-xs sm:text-sm text-stone-600 mb-6 leading-relaxed">
+        Aw, it won't be the same on the dancefloor without you! 💕 Totally understand, but we'll have to celebrate together soon instead! Sending you the biggest hug! ✨🪩
+      </p>
+      <button
+        type="button"
+        onclick="resetToLanding()"
+        class="py-3 px-6 rounded-2xl bg-[#FAF4F5] hover:bg-[#F7E8EC] border border-[#E5DADA] text-[#7D3648] font-bold text-xs transition"
+      >
+        ← Back to Start
+      </button>
+    </section>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- PART 2: FULL VIP 3-BAND INVITATION & DISCO PLAYER                         -->
+  <!-- ========================================================================= -->
+  <section id="part2DiscoSection" class="hidden w-full max-w-[440px] card-enter">
+    <!-- Top Music & Navigation Bar -->
+    <div class="flex items-center justify-between gap-2 mb-3 px-3.5 py-2.5 rounded-2xl bg-white/90 backdrop-blur-md border border-[#E5DADA] shadow-sm">
+      <button type="button" onclick="backToQuizFromInvite()" class="text-xs font-bold text-stone-500 hover:text-[#7D3648] px-2 py-1">
+        ← Back
+      </button>
+
+      <!-- Spinning Vinyl Audio Player -->
+      <button type="button" onclick="togglePartyAudio()" class="flex items-center gap-2.5 px-3 py-1 rounded-full bg-[#FAF4F5] border border-[#E5DADA] hover:bg-[#F7E8EC] transition">
+        <span id="miniVinylIcon" class="inline-block text-base vinyl-spin vinyl-paused">💿</span>
+        <div class="text-left">
+          <div id="playerTrackTitle" class="text-[11px] font-extrabold text-[#7D3648] leading-tight">ABBA — Dancing Queen</div>
+          <div id="playerStatusText" class="text-[9px] font-semibold text-stone-500">Tap to play music 🎶</div>
+        </div>
+      </button>
+
+      <span id="inviteGuestPillTop" class="px-2.5 py-1 rounded-full bg-[#F7E8EC] text-[#7D3648] text-[10px] font-extrabold uppercase truncate max-w-[95px]">
+        VIP PASS
+      </span>
+    </div>
+
+    <!-- THE 3-BAND OFFICIAL VIP INVITATION CARD -->
+    <article id="vipInvitationCard" class="rounded-[28px] bg-[#FFFDFD] border-2 border-[#E5DADA] shadow-2xl overflow-hidden">
+
+      <!-- BAND 1: CREAM TOP PAPER WITH DISCO BALLS, VINYL '17', DATE & POLAROID -->
+      <div class="relative px-6 pt-6 pb-7 text-center bg-gradient-to-b from-[#FFFDFD] to-[#FDF6F8]">
+        <!-- Hanging Disco Balls -->
+        <div class="flex justify-between items-start px-2 mb-1 pointer-events-none select-none">
+          <div class="flex flex-col items-center -mt-6">
+            <div class="w-[1.5px] h-7 bg-[#D8B4BE]"></div>
+            <span class="text-2xl animate-float">🪩</span>
+          </div>
+          <div class="pt-1">
+            <span class="inline-block px-3 py-1 rounded-full bg-[#FAF4F5] border border-[#E5DADA] text-[10px] font-extrabold tracking-[0.18em] text-[#7D3648] uppercase">
+              ✦ VIP GUEST: <span id="cardGuestNameDisplay">VIP GUEST</span> ✦
+            </span>
+          </div>
+          <div class="flex flex-col items-center -mt-6">
+            <div class="w-[1.5px] h-10 bg-[#D8B4BE]"></div>
+            <span class="text-2xl animate-float" style="animation-delay: 1.2s;">🪩</span>
+          </div>
+        </div>
+
+        <p class="text-[11px] font-extrabold tracking-[0.25em] text-[#A85568] uppercase mt-2">
+          You Are Invited To
+        </p>
+        <h1 id="cardHostTitle" class="font-serif-display italic text-5xl sm:text-6xl font-bold text-[#8E3B50] leading-none mt-1">
+          Ariella’s
+        </h1>
+        <p id="cardSubtitle" class="font-serif-display text-xl sm:text-2xl font-bold text-[#3B282C] mt-1">
+          17th Birthday Party!
+        </p>
+
+        <!-- Big 17 + Pink Vinyl Record -->
+        <div class="flex items-center justify-center gap-3 my-3">
+          <span id="cardAgeBadge" class="font-serif-display text-6xl sm:text-7xl font-bold text-[#8E3B50] leading-none">
+            17
+          </span>
+          <div onclick="togglePartyAudio()" class="cursor-pointer w-14 h-14 rounded-full bg-gradient-to-tr from-[#A85568] via-[#E5A4B4] to-[#7D3648] p-1.5 shadow-md flex items-center justify-center vinyl-spin" id="cardVinylRecord" title="Tap to play/pause music">
+            <div class="w-full h-full rounded-full border border-white/40 flex items-center justify-center">
+              <div class="w-4 h-4 rounded-full bg-[#FFFDFD] border-2 border-[#7D3648]"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date Divider Row -->
+        <div class="flex items-center justify-center gap-4 py-2.5 my-2 border-y border-[#E5DADA]">
+          <span id="cardDayOfWeek" class="text-xs sm:text-sm font-extrabold tracking-widest text-[#3B282C] uppercase">
+            SATURDAY
+          </span>
+          <span class="h-7 w-[1.5px] bg-[#A85568]"></span>
+          <span id="cardDayNum" class="font-serif-display text-3xl sm:text-4xl font-bold text-[#8E3B50]">
+            21
+          </span>
+          <span class="h-7 w-[1.5px] bg-[#A85568]"></span>
+          <div class="text-left leading-tight">
+            <div id="cardMonth" class="text-xs font-extrabold tracking-wider text-[#3B282C] uppercase">NOVEMBER</div>
+            <div id="cardYear" class="text-xs font-bold text-stone-500">2026</div>
+          </div>
+        </div>
+
+        <p id="cardTagline" class="font-serif-display italic text-base sm:text-lg text-[#4A2C33] mt-2 mb-5">
+          Let’s celebrate, make memories, and have a day to remember!
+        </p>
+
+        <!-- Tilted Polaroid Snapshot with Pink Washi Tape -->
+        <div class="relative w-56 sm:w-60 mx-auto bg-white p-3 pb-4 rounded-sm shadow-xl border border-stone-200 -rotate-2 transition hover:rotate-0">
+          <!-- Pink Washi Tape -->
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-5 bg-[#E5A4B4]/75 backdrop-blur-xs shadow-2xs rotate-1"></div>
+          <div class="w-full aspect-square overflow-hidden bg-[#FAF4F5]">
+            <img
+              id="polaroidPhotoImg"
+              src="Polaroid.JPG"
+              onerror="this.onerror=null;this.src='https://placehold.co/400x400/F7E8EC/7D3648?text=Young+%26+Sweet+17';"
+              alt="Ariella Polaroid"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <p id="cardPolaroidCaption" class="font-serif-display italic font-bold text-base text-[#7D3648] mt-2.5">
+            Young &amp; Sweet, Only 17 ✨
+          </p>
+        </div>
+      </div>
+
+      <!-- BAND 2: DISCO SHIMMER & FULL-WIDTH PINK DETAILS + HOUSE RULES BAND -->
+      <div class="disco-strip h-3 w-full"></div>
+      <div class="bg-[#F9E8ED] px-6 py-6 text-center border-y border-[#E5CBD3]">
+        <div class="grid grid-cols-2 gap-3 pb-4 mb-4 border-b border-[#E5CBD3]">
+          <div class="bg-white/75 rounded-2xl p-3 border border-[#E5CBD3]">
+            <div class="text-[10px] font-extrabold uppercase tracking-wider text-[#A85568]">⏰ Time</div>
+            <div id="cardTimeDisplay" class="text-xs sm:text-sm font-bold text-[#3B282C] mt-0.5">15.00 PM - onwards</div>
+          </div>
+          <div class="bg-white/75 rounded-2xl p-3 border border-[#E5CBD3]">
+            <div class="text-[10px] font-extrabold uppercase tracking-wider text-[#A85568]">🧸 Dress Code</div>
+            <div id="cardDressCodeDisplay" class="text-xs sm:text-sm font-bold text-[#3B282C] mt-0.5">Cute Pyjamas</div>
+          </div>
+        </div>
+
+        <!-- Venue & Address -->
+        <div class="mb-4 pb-4 border-b border-[#E5CBD3]">
+          <div class="text-[10px] font-extrabold uppercase tracking-widest text-[#A85568]">📍 Location</div>
+          <div id="cardVenueDisplay" class="font-serif-display text-2xl font-bold text-[#7D3648] mt-0.5">Game House</div>
+          <div id="cardAddressDisplay" class="text-xs sm:text-sm font-semibold text-[#3B282C]">3324 Rue Catherine</div>
+          <a
+            id="cardMapLink"
+            href="https://share.google/S7GIZ8Kgt6Q7qTRXL"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1 mt-2 px-3.5 py-1.5 rounded-full bg-white text-[#7D3648] border border-[#DFC0C9] text-[11px] font-extrabold shadow-2xs hover:bg-[#FFFDFD] transition"
+          >
+            🗺️ Open in Google Maps
+          </a>
+        </div>
+
+        <!-- House Rules -->
+        <div>
+          <div class="text-[10px] font-extrabold uppercase tracking-widest text-[#A85568] mb-2">📜 House Rules</div>
+          <ul id="cardHouseRulesList" class="space-y-1.5 text-xs sm:text-sm font-medium text-[#3B282C]">
+            <li>✦ Respect Dress Code</li>
+            <li>✦ All love no dispute</li>
+            <li>✦ Keep it clean and demure</li>
+            <li>✦ Please Respect Other Guests and Enjoy the Party ✨</li>
+          </ul>
+        </div>
+      </div>
+      <div class="disco-strip h-3 w-full"></div>
+
+      <!-- BAND 3: DOUBLE-BORDERED "WAITING FOR YOU" FOOTER -->
+      <div class="bg-[#FFFDFD] px-6 py-5 text-center">
+        <div class="border-2 border-double border-[#DFB8C3] rounded-2xl py-3.5 px-4">
+          <p class="font-serif-display italic text-2xl font-bold text-[#8E3B50]">
+            Waiting for you 😚
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ACTION BUTTONS BELOW THE INVITATION CARD -->
+    <div class="mt-4 space-y-2.5">
+      <button
+        type="button"
+        onclick="downloadInvitationCardImage()"
+        class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#A85568] to-[#8C3D50] hover:from-[#964659] hover:to-[#783142] text-white font-extrabold text-sm tracking-wide shadow-xl shadow-[#A85568]/25 transition active:scale-95 flex items-center justify-center gap-2"
+      >
+        <span>📸 Save Invitation to Phone</span>
+      </button>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        <button
+          type="button"
+          onclick="addToPhoneCalendar()"
+          class="py-3 px-4 rounded-2xl bg-white hover:bg-[#FAF4F5] border-2 border-[#E5DADA] text-[#7D3648] font-extrabold text-xs shadow-sm transition active:scale-95"
+        >
+          📅 Add to Calendar
+        </button>
+
+        <a
+          id="giftRegistryBtn"
+          href="https://tinyurl.com/GiftCalcu"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="py-3 px-4 rounded-2xl bg-white hover:bg-[#FAF4F5] border-2 border-[#E5DADA] text-[#7D3648] font-extrabold text-xs shadow-sm transition active:scale-95 text-center flex items-center justify-center"
+        >
+          🎁 Gift Idea Helper
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- DISCRETE BOTTOM-RIGHT HOST LOGIN LOCK BUTTON                              -->
+  <!-- ========================================================================= -->
+  <button id="hostLoginBtn" type="button" onclick="openPinModal()" title="Host Login" class="fixed bottom-3 right-3 z-40 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white backdrop-blur-sm border border-[#E5DADA] text-[11px] font-semibold text-stone-500 hover:text-[#A85568] shadow-xs transition">
+    🔒 Host
+  </button>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: VIP PASS IMAGE PREVIEW & SAVE MODAL                              -->
+  <!-- ========================================================================= -->
+  <div id="vipImageSaveModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+    <div class="w-full max-w-sm rounded-3xl bg-white border-2 border-[#E5DADA] shadow-2xl p-5 text-center max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-extrabold uppercase tracking-wider text-[#A85568]">Your Custom VIP Pass</span>
+        <button type="button" onclick="closeVipImageSaveModal()" class="text-stone-400 hover:text-stone-700 text-lg font-bold px-2">✕</button>
+      </div>
+      <p id="vipSaveHintText" class="text-[11px] text-stone-500 mb-3">
+        Press &amp; hold the image below or tap Save to store it in your Photos!
+      </p>
+      <div class="flex-1 overflow-y-auto rounded-2xl border border-[#E5DADA] bg-[#FAF4F5] p-2 mb-3">
+        <img id="vipGeneratedPreviewImg" src="" alt="Your VIP Invitation Pass" class="w-full h-auto rounded-xl shadow-sm" />
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <button type="button" onclick="shareOrSaveVipPassFile()" class="py-3 px-3 rounded-2xl bg-[#A85568] text-white text-xs font-extrabold hover:bg-[#8E4355] transition">
+          📤 Share / Save
+        </button>
+        <button type="button" onclick="handleDirectVipDownloadClick()" class="py-3 px-3 rounded-2xl bg-[#FAF4F5] border border-[#E5DADA] text-[#7D3648] text-xs font-extrabold hover:bg-[#F7E8EC] transition">
+          ⬇️ Download PNG
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: HOST PIN UNLOCK MODAL                                            -->
+  <!-- ========================================================================= -->
+  <div id="pinModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+    <div class="w-full max-w-xs rounded-3xl bg-white border-2 border-[#E5DADA] shadow-2xl p-6 text-center">
+      <div class="text-3xl mb-2">👑</div>
+      <h3 class="font-serif-display text-2xl font-bold text-[#3B282C] mb-1">Host Unlock</h3>
+      <p class="text-xs text-stone-500 mb-4">Enter your Host PIN to manage RSVPs &amp; settings.</p>
+      <input
+        id="hostPinInput"
+        type="password"
+        inputmode="numeric"
+        maxlength="8"
+        placeholder="••••"
+        onkeydown="if(event.key==='Enter') submitHostPin()"
+        class="w-full text-center tracking-[0.4em] text-lg font-extrabold px-4 py-3 rounded-2xl bg-[#FAF4F5] border-2 border-[#E5DADA] mb-3 focus:outline-none focus:border-[#A85568]"
+      />
+      <div class="grid grid-cols-2 gap-2">
+        <button type="button" onclick="closePinModal()" class="py-2.5 rounded-xl bg-stone-100 text-stone-600 text-xs font-bold">Cancel</button>
+        <button type="button" onclick="submitHostPin()" class="py-2.5 rounded-xl bg-[#A85568] text-white text-xs font-extrabold">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: HOST MANUALLY ADD RSVP MODAL                                     -->
+  <!-- ========================================================================= -->
+  <div id="addRsvpModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+    <div class="w-full max-w-md rounded-3xl bg-white border-2 border-[#E5DADA] shadow-2xl p-5 sm:p-6 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-serif-display text-2xl font-bold text-[#7D3648]">➕ Add Guest RSVP</h3>
+        <button type="button" onclick="closeAddRsvpModal()" class="text-stone-400 hover:text-stone-700 text-lg font-bold px-2">✕</button>
+      </div>
+      <p class="text-xs text-stone-500 mb-4">Add someone who didn't take the quiz and select their answers so it matches everyone else seamlessly.</p>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-[11px] font-extrabold uppercase text-[#7D3648] mb-1">Guest Name</label>
+          <input id="manualRsvpName" type="text" placeholder="Enter guest name..." class="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF4F5] border border-[#E5DADA] text-xs font-semibold" />
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-extrabold uppercase text-[#7D3648] mb-1">Status</label>
+          <select id="manualRsvpStatus" class="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF4F5] border border-[#E5DADA] text-xs font-bold text-[#3B282C]">
+            <option value="confirmed">✅ Confirmed (Invited)</option>
+            <option value="pending">⏳ Pending Approval</option>
+            <option value="declined">❌ Declined</option>
+          </select>
+        </div>
+
+        <div id="manualRsvpQuestionsContainer" class="space-y-3 pt-1"></div>
+
+        <div>
+          <label class="block text-[11px] font-extrabold uppercase text-[#7D3648] mb-1">+1 Name (If bringing +1)</label>
+          <input id="manualRsvpPlusOne" type="text" placeholder="Optional +1 name..." class="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF4F5] border border-[#E5DADA] text-xs font-semibold" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5 mt-5">
+        <button type="button" onclick="closeAddRsvpModal()" class="py-3 rounded-2xl bg-stone-100 text-stone-600 text-xs font-bold">Cancel</button>
+        <button type="button" onclick="saveManualRsvp()" class="py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold">Save Guest RSVP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 4: HOST PARTY SETTINGS EDITOR                                       -->
+  <!-- ========================================================================= -->
+  <div id="settingsModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+    <div class="w-full max-w-md rounded-3xl bg-white border-2 border-[#E5DADA] shadow-2xl p-5 sm:p-6 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-serif-display text-2xl font-bold text-[#7D3648]">⚙️ Party Details &amp; Settings</h3>
+        <button type="button" onclick="closeSettingsModal()" class="text-stone-400 hover:text-stone-700 text-lg font-bold px-2">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold text-[#7D3648] mb-1">Day of Week</label>
+            <input id="setDayOfWeek" type="text" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA]" />
+          </div>
+          <div>
+            <label class="block font-bold text-[#7D3648] mb-1">Day Number</label>
+            <input id="setDayNum" type="text" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA]" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold text-[#7D3648] mb-1">Month</label>
+            <input id="setMonth" type="text" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA]" />
+          </div>
+          <div>
+            <label class="block font-bold text-[#7D3648] mb-1">Year</label>
+            <input id="setYear" type="text" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA]" />
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-[#7D3648] mb-1">Party Time</label>
+          <input id="setTime" type="text" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA]" />
+        </div>
+        <div>
+          <label class="block font-bold text-[#7D3648] mb-1">Dress Code</label>
+          <input id="setDressCode" type="text" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA]" />
+        </div>
+        <div>
+          <label class="block font-bold text-[#7D3648] mb-1">Venue Name</label>
+          <input id="setVenue" type="text" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA]" />
+        </div>
+        <div>
+          <label class="block font-bold text-[#7D3648] mb-1">Street Address</label>
+          <input id="setAddress" type="text" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA]" />
+        </div>
+        <div>
+          <label class="block font-bold text-[#7D3648] mb-1">House Rules (One per line)</label>
+          <textarea id="setHouseRules" rows="4" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA]"></textarea>
+        </div>
+        <div>
+          <label class="block font-bold text-[#7D3648] mb-1">Host PIN</label>
+          <input id="setHostPin" type="text" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA]" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5 mt-5">
+        <button type="button" onclick="closeSettingsModal()" class="py-3 rounded-2xl bg-stone-100 text-stone-600 text-xs font-bold">Cancel</button>
+        <button type="button" onclick="savePartySettings()" class="py-3 rounded-2xl bg-[#A85568] text-white text-xs font-extrabold">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- BACKGROUND AUDIO ELEMENT                                                  -->
+  <!-- ========================================================================= -->
+  <audio id="partyAudioPlayer" src="Dancing Queen Abba.mp3" preload="metadata" loop></audio>
+
+  <script>
+    // =========================================================================
+    // 1. ISOLATED SANDBOX DETECTION & CONFIGURATION
+    // =========================================================================
+    function isPreviewSandboxEnvironment() {
+      const proto = (window.location.protocol || "").toLowerCase();
+      const host = (window.location.hostname || "").toLowerCase();
+      return (
+        proto === "blob:" ||
+        proto === "file:" ||
+        host.includes("scf.usercontent.goog") ||
+        host.includes("googleusercontent.com") ||
+        host === "localhost" ||
+        host === "127.0.0.1"
+      );
+    }
+
+    const IS_SANDBOX = isPreviewSandboxEnvironment();
+    const LIVE_ROOM_ID = "ariella-vip-2026-x9k4";
+    const ACTIVE_ROOM_ID = IS_SANDBOX ? `${LIVE_ROOM_ID}-sandbox` : LIVE_ROOM_ID;
+    const MASTER_KEY = `${ACTIVE_ROOM_ID}-master-v2`;
+    const LOCAL_RSVPS_KEY = `ariella_rsvps_${ACTIVE_ROOM_ID}`;
+    const LOCAL_DELETED_KEY = `ariella_deleted_${ACTIVE_ROOM_ID}`;
+    const LOCAL_CFG_KEY = `ariella_cfg_${ACTIVE_ROOM_ID}`;
+    const HOST_UNLOCKED_STORAGE_KEY = "ariella_host_device_unlocked_v1";
+
+    // Legacy storage keys used in earlier versions so existing GitHub RSVPs automatically recover
+    const LEGACY_LOCAL_KEYS = [
+      "ariella_rsvps_ariella-vip-2026-x9k4",
+      "ariella_vip_rsvps_v1",
+      "ariella_guest_rsvps",
+      "vip_party_rsvps",
+      "rsvp_responses"
+    ];
+// ... existing code ... -->
+    function loadLocalRsvps() {
+      let combined = [];
+      const keysToCheck = IS_SANDBOX ? [LOCAL_RSVPS_KEY] : [LOCAL_RSVPS_KEY, ...LEGACY_LOCAL_KEYS];
+      keysToCheck.forEach((key) => {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) return;
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            combined = combined.concat(parsed);
+          } else if (parsed && Array.isArray(parsed.responses)) {
+            combined = combined.concat(parsed.responses);
+          }
+        } catch (e) {}
+      });
+
+      // Also scan any other localStorage key containing 'ariella' or 'rsvp' on live GitHub domain
+      if (!IS_SANDBOX) {
+        try {
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (!k || keysToCheck.includes(k) || k.includes("deleted") || k.includes("sandbox")) continue;
+            if (k.toLowerCase().includes("rsvp") || k.toLowerCase().includes("ariella")) {
+              const raw = localStorage.getItem(k);
+              const parsed = raw ? JSON.parse(raw) : null;
+              if (Array.isArray(parsed)) combined = combined.concat(parsed);
+            }
+          }
+        } catch (e) {}
+      }
+
+      const map = new Map();
+      combined.forEach((item) => {
+        if (!item || !item.name) return;
+        const id = item.id || `guest_${normalizeGuestKey(item.name)}`;
+        const existing = map.get(id);
+        if (!existing || (item.updatedAt || item.createdAt || 0) >= (existing.updatedAt || existing.createdAt || 0)) {
+          map.set(id, { ...item, id });
+        }
+      });
+      return Array.from(map.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    }
+// ... existing code ... -->
+    // Cross-browser key-value mirror + legacy room fallback recovery
+    const CLOUD_MIRROR_URL = `https://kvdb.io/A9x7kP2mQ8vR4wL1nZ6t/${encodeURIComponent(MASTER_KEY)}`;
+    const LEGACY_CLOUD_URLS = [
+      `https://kvdb.io/A9x7kP2mQ8vR4wL1nZ6t/${encodeURIComponent(ACTIVE_ROOM_ID)}`,
+      `https://ntfy.sh/${encodeURIComponent(ACTIVE_ROOM_ID)}/json?poll=1`
+    ];
+
+    async function pushMasterStateToCloud() {
+      const payload = {
+        updatedAt: Date.now(),
+        responses: guestResponses,
+        deletedIds: Array.from(deletedGuestIds)
+      };
+      try {
+        await fetch(CLOUD_MIRROR_URL, {
+          method: "POST",
+          mode: "cors",
+          credentials: "omit",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        // Fallback no-cors write if browser tracking prevention restricts preflight
+        try {
+          await fetch(CLOUD_MIRROR_URL, {
+            method: "POST",
+            mode: "no-cors",
+            credentials: "omit",
+            body: JSON.stringify(payload)
+          });
+        } catch (err) {}
+      }
+    }
+
+    async function syncAllCloudSources(manualTrigger = false) {
+      const statusEl = document.getElementById("syncStatusLabel");
+      if (statusEl && manualTrigger) statusEl.textContent = "Syncing & recovering RSVPs...";
+
+      let remoteEntries = [];
+      let remoteDeleted = [];
+
+      // 1. Fetch primary master snapshot
+      try {
+        const res = await fetch(`${CLOUD_MIRROR_URL}?t=${Date.now()}`, {
+          method: "GET",
+          mode: "cors",
+          credentials: "omit",
+          cache: "no-store"
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Array.isArray(data.responses)) {
+            remoteEntries = remoteEntries.concat(data.responses);
+            if (Array.isArray(data.deletedIds)) remoteDeleted = remoteDeleted.concat(data.deletedIds);
+          }
+        }
+      } catch (e) {}
+
+      // 2. Also check legacy kvdb & ntfy streams so previous GitHub submissions reappear automatically
+      if (!IS_SANDBOX) {
+        for (const legacyUrl of LEGACY_CLOUD_URLS) {
+          try {
+            const lRes = await fetch(legacyUrl, { method: "GET", mode: "cors", credentials: "omit", cache: "no-store" });
+            if (!lRes.ok) continue;
+            const rawText = await lRes.text();
+            if (legacyUrl.includes("ntfy.sh")) {
+              rawText.split("\n").forEach((line) => {
+                if (!line.trim()) return;
+                try {
+                  const evt = JSON.parse(line);
+                  const msgObj = typeof evt.message === "string" ? JSON.parse(evt.message) : evt.message;
+                  if (msgObj && msgObj.name) remoteEntries.push(msgObj);
+                  if (msgObj && Array.isArray(msgObj.responses)) remoteEntries = remoteEntries.concat(msgObj.responses);
+                } catch (e) {}
+              });
+            } else {
+              const parsed = JSON.parse(rawText);
+              if (Array.isArray(parsed)) remoteEntries = remoteEntries.concat(parsed);
+              else if (parsed && Array.isArray(parsed.responses)) remoteEntries = remoteEntries.concat(parsed.responses);
+            }
+          } catch (e) {}
+        }
+      }
+
+      const beforeCount = guestResponses.length;
+      const merged = mergeResponsesList(guestResponses, remoteEntries, remoteDeleted);
+      saveLocalRsvps(merged);
+
+      // Promote recovered/merged list into the unified cloud master snapshot
+      if (merged.length > 0 && (merged.length !== beforeCount || manualTrigger)) {
+        await pushMasterStateToCloud();
+      }
+
+      if (statusEl) {
+        const nowStr = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        statusEl.textContent = `Synced (${merged.length} guests) • ${nowStr}`;
+      }
+
+      if (isHostUnlocked) {
+        checkForNewPendingHostPopup();
+        renderHostRsvpList();
+      } else if (!document.getElementById("screenPendingApproval").classList.contains("hidden")) {
+        checkPendingGuestStatusNow(false);
+      }
+    }
+
+    // =========================================================================
+    // 2. DEFAULT PARTY CONFIG & QUIZ QUESTIONS
+    // =========================================================================
+    const DEFAULT_PARTY_CONFIG = {
+      hostName: "Ariella’s",
+      age: "17",
+      subtitle: "17th Birthday Party!",
+      tagline: "Let’s celebrate, make memories, and have a day to remember!",
+      polaroidCaption: "Young & Sweet, Only 17 ✨",
+      dayOfWeek: "SATURDAY",
+      dayNum: "21",
+      month: "NOVEMBER",
+      year: "2026",
+      time: "15.00 PM - onwards",
+      dressCode: "Cute Pyjamas",
+      venue: "Game House",
+      venueAddress: "3324 Rue Catherine",
+      mapUrl: "https://share.google/S7GIZ8Kgt6Q7qTRXL",
+      giftCalcUrl: "https://tinyurl.com/GiftCalcu",
+      trackTitle: "ABBA — Dancing Queen",
+      audioStartSeconds: 88,
+      hostPin: "2009",
+      houseRules: [
+        "Respect Dress Code",
+        "All love no dispute",
+        "Keep it clean and demure",
+        "Please Respect Other Guests and Enjoy the Party ✨"
+      ],
+      questions: [
+        {
+          question: "Are you bringing a plus one? 👯‍♀️",
+          options: ["Just me! 🙋‍♀️", "Yes, bringing +1 👯‍♀️", "Not sure yet 🤔"]
+        },
+        {
+          question: "Are you bringing a gift? 🎁",
+          options: ["Yes, obviously 💅", "Yes, something small & cute 🎀", "My presence is the present ✨"]
+        },
+        {
+          question: "What's your drink vibe for the night? 🥂",
+          options: ["Champagne 🥂", "Soda 🥤", "Fresh water ✨"]
+        },
+        {
+          question: "What time are we seeing you? ✨",
+          options: ["Right on time for photos 📸", "Fashionably late 😎", "Closing down the dancefloor 🪩"]
+        }
+      ]
+    };
+
+    let partyConfig = loadPartyConfig();
+    let deletedGuestIds = loadDeletedIds();
+    let guestResponses = loadLocalRsvps();
+    let isHostUnlocked = false;
+    let currentGuestName = "";
+    let currentGuestRecordId = "";
+    let currentQuizIndex = 0;
+    let currentQuizAnswers = [];
+    let currentPlusOneName = "";
+    let noDodgeCount = 0;
+    let lastTouchDodgeAt = 0;
+    let secretDiscoTapCount = 0;
+    let secretDiscoTapTimer = null;
+    let knownPendingIds = new Set();
+    let currentLivePopupGuestId = null;
+    let lastGeneratedVipDataUrl = "";
+    let lastGeneratedVipBlob = null;
+    let lastGeneratedVipFilename = "Ariella-17th-Birthday-VIP-Pass.png";
+
+    function loadPartyConfig() {
+      try {
+        const raw = localStorage.getItem(LOCAL_CFG_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return { ...DEFAULT_PARTY_CONFIG, ...parsed };
+        }
+      } catch (e) {}
+      return { ...DEFAULT_PARTY_CONFIG };
+    }
+
+    function savePartyConfig() {
+      try {
+        localStorage.setItem(LOCAL_CFG_KEY, JSON.stringify(partyConfig));
+      } catch (e) {}
+    }
+
+    function loadDeletedIds() {
+      try {
+        const raw = localStorage.getItem(LOCAL_DELETED_KEY);
+        if (raw) {
+          const arr = JSON.parse(raw);
+          if (Array.isArray(arr)) return new Set(arr);
+        }
+      } catch (e) {}
+      return new Set();
+    }
+
+    function saveDeletedIds() {
+      try {
+        localStorage.setItem(LOCAL_DELETED_KEY, JSON.stringify(Array.from(deletedGuestIds)));
+      } catch (e) {}
+    }
+
+    function saveLocalRsvps(list) {
+      guestResponses = Array.isArray(list) ? list : [];
+      try {
+        localStorage.setItem(LOCAL_RSVPS_KEY, JSON.stringify(guestResponses));
+      } catch (e) {}
+    }
+
+    function normalizeGuestKey(name) {
+      return String(name || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "") || "guest";
+    }
+
+    function mergeResponsesList(localList, remoteList, remoteDeletedList = []) {
+      if (Array.isArray(remoteDeletedList)) {
+        remoteDeletedList.forEach((id) => deletedGuestIds.add(id));
+        saveDeletedIds();
+      }
+      const map = new Map();
+      [...(localList || []), ...(remoteList || [])].forEach((item) => {
+        if (!item || !item.name) return;
+        const id = item.id || `guest_${normalizeGuestKey(item.name)}`;
+        if (deletedGuestIds.has(id)) return;
+        const prev = map.get(id);
+        if (!prev || (item.updatedAt || item.createdAt || 0) >= (prev.updatedAt || prev.createdAt || 0)) {
+          map.set(id, { ...item, id });
+        }
+      });
+      return Array.from(map.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    }
+
+    // =========================================================================
+    // 3. TOAST & SOUND CHIME HELPERS
+    // =========================================================================
+    let toastTimeout = null;
+    function showToast(msg, duration = 3200) {
+      const el = document.getElementById("toastBanner");
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.remove("hidden");
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        el.classList.add("hidden");
+      }, duration);
+    }
+
+    function playNotificationChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.14);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.46);
+        osc.onended = () => {
+          try { ctx.close(); } catch (e) {}
+        };
+      } catch (e) {}
+    }
+
+    // =========================================================================
+    // 4. PLAYFUL DODGING 'NO' BUTTON (2 DODGES ON DESKTOP & MOBILE)
+    // =========================================================================
+    function triggerNoDodge(btn) {
+      noDodgeCount += 1;
+      const offsetX = noDodgeCount === 1 ? -46 : 46;
+      const offsetY = noDodgeCount === 1 ? -14 : 14;
+      btn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      if (noDodgeCount === 1) {
+        showToast("Wait... think of the snacks?! 🥺🍿", 2600);
+      } else {
+        showToast("Really?! Think of the games! 🎮✨", 2600);
+      }
+    }
+
+    function handleNoButtonHover(e) {
+      if (Date.now() - lastTouchDodgeAt < 600) return;
+      const btn = e.currentTarget || document.getElementById("dodgingNoBtn");
+      if (!btn || noDodgeCount >= 2) return;
+      triggerNoDodge(btn);
+    }
+
+    function handleNoButtonTouch(e) {
+      const btn = e.currentTarget || document.getElementById("dodgingNoBtn");
+      if (!btn) return;
+      if (noDodgeCount < 2) {
+        e.preventDefault();
+        lastTouchDodgeAt = Date.now();
+        triggerNoDodge(btn);
+      }
+    }
+
+    function handleNoButtonClick(e) {
+      const btn = e.currentTarget || document.getElementById("dodgingNoBtn");
+      if (btn && noDodgeCount < 2) {
+        e.preventDefault();
+        triggerNoDodge(btn);
+        return;
+      }
+
+      const rawName = (document.getElementById("guestNameInput")?.value || "").trim();
+      if (rawName) {
+        const id = `guest_${normalizeGuestKey(rawName)}`;
+        deletedGuestIds.delete(id);
+        saveDeletedIds();
+        const entry = {
+          id,
+          name: rawName,
+          status: "declined",
+          answers: ["Declined on landing"],
+          plusOne: "",
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        };
+        const updated = mergeResponsesList(guestResponses, [entry]);
+        saveLocalRsvps(updated);
+        pushMasterStateToCloud();
+      }
+
+      const headlineEl = document.getElementById("declinedHeadline");
+      const bodyEl = document.getElementById("declinedBodyText");
+      if (headlineEl) headlineEl.textContent = "We'll Miss You So Much! 💕";
+      if (bodyEl) {
+        bodyEl.textContent =
+          "Aw, it won't be the same on the dancefloor without you! 💕 Totally understand, but we'll have to celebrate together soon instead! Sending you the biggest hug! ✨🪩";
+      }
+      showOnlyGuestScreen("screenDeclined");
+    }
+
+    // =========================================================================
+    // 5. LANDING & QUIZ FLOW + HOST APPROVAL GATE
+    // =========================================================================
+    function showOnlyGuestScreen(screenId) {
+      const ids = [
+        "screenLanding",
+        "screenAlreadyInvited",
+        "screenQuiz",
+        "screenPendingApproval",
+        "screenApproved",
+        "screenDeclined"
+      ];
+      ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("hidden", id !== screenId);
+      });
+      document.getElementById("part1QuizSection")?.classList.remove("hidden");
+      document.getElementById("part2DiscoSection")?.classList.add("hidden");
+    }
+
+    function resetToLanding() {
+      noDodgeCount = 0;
+      const noBtn = document.getElementById("dodgingNoBtn");
+      if (noBtn) noBtn.style.transform = "translate(0px, 0px)";
+      showOnlyGuestScreen("screenLanding");
+    }
+
+    function handleLandingYes() {
+      const input = document.getElementById("guestNameInput");
+      const name = (input?.value || "").trim();
+      if (!name) {
+        showToast("Please enter your name first so we know who's coming! ✨");
+        input?.focus();
+        return;
+      }
+
+      currentGuestName = name;
+      currentGuestRecordId = `guest_${normalizeGuestKey(name)}`;
+
+      // Check if guest already submitted an RSVP
+      const existing = guestResponses.find(
+        (r) => r.id === currentGuestRecordId || normalizeGuestKey(r.name) === normalizeGuestKey(name)
+      );
+
+      if (existing) {
+        currentGuestRecordId = existing.id;
+        if (existing.status === "confirmed") {
+          const head = document.getElementById("alreadyInvitedHeadline");
+          const sub = document.getElementById("alreadyInvitedSubtext");
+          const btn = document.getElementById("alreadyInvitedActionBtn");
+          if (head) head.textContent = `Welcome back, ${existing.name}! 🎉`;
+          if (sub) sub.textContent = "You're already confirmed on the VIP list! Open your official invitation pass below.";
+          if (btn) {
+            btn.textContent = "🎟️ Open My VIP Invitation";
+            btn.onclick = openEnvelopeFromApproved;
+          }
+          showOnlyGuestScreen("screenAlreadyInvited");
+          return;
+        }
+        if (existing.status === "pending") {
+          const pendingLabel = document.getElementById("pendingGuestNameLabel");
+          if (pendingLabel) pendingLabel.textContent = existing.name;
+          showOnlyGuestScreen("screenPendingApproval");
+          return;
+        }
+      }
+
+      // Start fresh 4-question quiz
+      currentQuizIndex = 0;
+      currentQuizAnswers = [];
+      currentPlusOneName = "";
+      renderCurrentQuizQuestion();
+      showOnlyGuestScreen("screenQuiz");
+    }
+
+    function renderCurrentQuizQuestion() {
+      const questions = partyConfig.questions || DEFAULT_PARTY_CONFIG.questions;
+      const total = questions.length;
+      const qObj = questions[currentQuizIndex];
+      if (!qObj) return;
+
+      document.getElementById("quizStepLabel").textContent = `Question ${currentQuizIndex + 1} of ${total}`;
+      document.getElementById("quizGuestBadge").textContent = currentGuestName || "VIP Guest";
+      document.getElementById("quizProgressBar").style.width = `${Math.round(((currentQuizIndex + 1) / total) * 100)}%`;
+      document.getElementById("quizQuestionText").textContent = qObj.question;
+
+      const plusBox = document.getElementById("plusOneNameBox");
+      if (plusBox) plusBox.classList.add("hidden");
+
+      const container = document.getElementById("quizOptionsContainer");
+      container.innerHTML = "";
+      (qObj.options || []).forEach((optText) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className =
+          "w-full text-left px-4 py-3.5 rounded-2xl bg-[#FAF4F5] hover:bg-[#F7E8EC] border-2 border-[#E5DADA] hover:border-[#A85568] text-sm font-bold text-[#3B282C] transition active:scale-98";
+        btn.textContent = optText;
+        btn.onclick = () => selectQuizOption(optText);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectQuizOption(optionText) {
+      currentQuizAnswers[currentQuizIndex] = optionText;
+
+      // If Question 1 indicates bringing a +1, reveal optional +1 name input
+      if (currentQuizIndex === 0 && optionText.toLowerCase().includes("+1")) {
+        const plusBox = document.getElementById("plusOneNameBox");
+        if (plusBox) {
+          plusBox.classList.remove("hidden");
+          document.getElementById("plusOneNameInput")?.focus();
+          return;
+        }
+      }
+
+      advanceQuizStep();
+    }
+
+    function confirmPlusOneAndAdvance() {
+      currentPlusOneName = (document.getElementById("plusOneNameInput")?.value || "").trim();
+      advanceQuizStep();
+    }
+
+    function prevQuizQuestion() {
+      if (currentQuizIndex > 0) {
+        currentQuizIndex -= 1;
+        renderCurrentQuizQuestion();
+      } else {
+        resetToLanding();
+      }
+    }
+
+    async function advanceQuizStep() {
+      const questions = partyConfig.questions || DEFAULT_PARTY_CONFIG.questions;
+      if (currentQuizIndex + 1 < questions.length) {
+        currentQuizIndex += 1;
+        renderCurrentQuizQuestion();
+        return;
+      }
+
+      // Submit request as PENDING HOST APPROVAL
+      deletedGuestIds.delete(currentGuestRecordId);
+      saveDeletedIds();
+
+      const newRequest = {
+        id: currentGuestRecordId,
+        name: currentGuestName,
+        status: "pending",
+        answers: [...currentQuizAnswers],
+        plusOne: currentPlusOneName,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+
+      const updated = mergeResponsesList(guestResponses, [newRequest]);
+      saveLocalRsvps(updated);
+      await pushMasterStateToCloud();
+
+      const pendingLabel = document.getElementById("pendingGuestNameLabel");
+      if (pendingLabel) pendingLabel.textContent = currentGuestName;
+      showOnlyGuestScreen("screenPendingApproval");
+    }
+
+    // =========================================================================
+    // 6. GUEST PHONE NOTIFICATION & LIVE APPROVAL POLLING
+    // =========================================================================
+    async function enableGuestPhoneNotification() {
+      if (!("Notification" in window)) {
+        showToast("Live auto-check enabled! Keep this tab open to unlock automatically ✨");
+        return;
+      }
+      try {
+        const perm = await Notification.requestPermission();
+        if (perm === "granted") {
+          const btn = document.getElementById("enableGuestNotifyBtn");
+          if (btn) btn.textContent = "✅ Phone Alerts Active! Waiting for Host...";
+          showToast("Phone notification enabled! We'll alert you the second Ariella responds 🔔");
+        } else {
+          showToast("Notifications blocked by browser — keep this page open for instant unlock ✨");
+        }
+      } catch (e) {
+        showToast("Keep this page open — it checks automatically every few seconds ✨");
+      }
+    }
+
+    async function checkPendingGuestStatusNow(manual = false) {
+      if (manual) await syncAllCloudSources(false);
+      if (!currentGuestRecordId) return;
+
+      const record = guestResponses.find((r) => r.id === currentGuestRecordId);
+      if (!record) return;
+
+      if (record.status === "confirmed") {
+        playNotificationChime();
+        try { if (navigator.vibrate) navigator.vibrate([120, 60, 180]); } catch (e) {}
+        if ("Notification" in window && Notification.permission === "granted") {
+          try {
+            new Notification("🎉 You're Invited to Ariella's 17th!", {
+              body: `Yay ${record.name}! Your VIP invitation pass is unlocked!`
+            });
+          } catch (e) {}
+        }
+        showOnlyGuestScreen("screenApproved");
+      } else if (record.status === "declined") {
+        const headlineEl = document.getElementById("declinedHeadline");
+        const bodyEl = document.getElementById("declinedBodyText");
+        if (headlineEl) headlineEl.textContent = "Update from the Host 💌";
+        if (bodyEl) {
+          bodyEl.textContent =
+            "Thank you so much for wanting to celebrate! 💕 Unfortunately, the host had to decline this request because the guest limit has been reached or you don't know each other well enough yet. Sending warm wishes! ✨";
+        }
+        showOnlyGuestScreen("screenDeclined");
+      } else if (manual) {
+        showToast("Still waiting for host response — hang tight! ⏳");
+      }
+    }
+
+    // =========================================================================
+    // 7. PART 2 INVITATION DISPLAY, AUDIO PLAYER & CALENDAR HANDOFF
+    // =========================================================================
+    function openEnvelopeFromApproved() {
+      document.getElementById("part1QuizSection")?.classList.add("hidden");
+      document.getElementById("part2DiscoSection")?.classList.remove("hidden");
+
+      const displayName = (currentGuestName || "VIP GUEST").toUpperCase();
+      const topPill = document.getElementById("inviteGuestPillTop");
+      const cardName = document.getElementById("cardGuestNameDisplay");
+      if (topPill) topPill.textContent = displayName;
+      if (cardName) cardName.textContent = displayName;
+
+      // Auto-start Dancing Queen at chorus timestamp if allowed
+      const audio = document.getElementById("partyAudioPlayer");
+      if (audio && audio.paused) {
+        try {
+          if (audio.currentTime < 1 && partyConfig.audioStartSeconds) {
+            audio.currentTime = Number(partyConfig.audioStartSeconds) || 0;
+          }
+          audio.play().then(() => updateAudioPlayerUI(true)).catch(() => {});
+        } catch (e) {}
+      }
+    }
+
+    function backToQuizFromInvite() {
+      document.getElementById("part2DiscoSection")?.classList.add("hidden");
+      document.getElementById("part1QuizSection")?.classList.remove("hidden");
+      showOnlyGuestScreen("screenApproved");
+    }
+
+    function togglePartyAudio() {
+      const audio = document.getElementById("partyAudioPlayer");
+      if (!audio) return;
+      if (audio.paused) {
+        if (audio.currentTime < 1 && partyConfig.audioStartSeconds) {
+          try { audio.currentTime = Number(partyConfig.audioStartSeconds) || 0; } catch (e) {}
+        }
+        audio.play().then(() => updateAudioPlayerUI(true)).catch(() => {
+          showToast("Tap again to allow audio playback 🎶");
+        });
+      } else {
+        audio.pause();
+        updateAudioPlayerUI(false);
+      }
+    }
+
+    function updateAudioPlayerUI(isPlaying) {
+      const mini = document.getElementById("miniVinylIcon");
+      const big = document.getElementById("cardVinylRecord");
+      const status = document.getElementById("playerStatusText");
+      if (mini) mini.classList.toggle("vinyl-paused", !isPlaying);
+      if (big) big.classList.toggle("vinyl-paused", !isPlaying);
+      if (status) status.textContent = isPlaying ? "Now playing 🎶" : "Tap to play music 🎶";
+    }
+
+    function addToPhoneCalendar() {
+      const title = `${partyConfig.hostName || "Ariella's"} ${partyConfig.subtitle || "17th Birthday Party!"}`;
+      const location = `${partyConfig.venue || "Game House"} - ${partyConfig.venueAddress || "3324 Rue Catherine"}`;
+      const details = `Dress Code: ${partyConfig.dressCode || "Cute Pyjamas"} | Time: ${partyConfig.time || "15.00 PM - onwards"}`;
+
+      // Parse start hour/minute from partyConfig.time (defaults to 15:00)
+      const timeMatch = String(partyConfig.time || "15:00").match(/(\d{1,2})[:.](\d{2})/);
+      const startHour = timeMatch ? parseInt(timeMatch[1], 10) : 15;
+      const startMin = timeMatch ? parseInt(timeMatch[2], 10) : 0;
+
+      const monthsMap = {
+        JANUARY: "01", FEBRUARY: "02", MARCH: "03", APRIL: "04",
+        MAY: "05", JUNE: "06", JULY: "07", AUGUST: "08",
+        SEPTEMBER: "09", OCTOBER: "10", NOVEMBER: "11", DECEMBER: "12"
+      };
+      const yr = String(partyConfig.year || "2026").trim();
+      const mo = monthsMap[String(partyConfig.month || "NOVEMBER").trim().toUpperCase()] || "11";
+      const dy = String(partyConfig.dayNum || "21").trim().padStart(2, "0");
+
+      const pad2 = (n) => String(n).padStart(2, "0");
+      const startStamp = `${yr}${mo}${dy}T${pad2(startHour)}${pad2(startMin)}00`;
+      const endHour = Math.min(23, startHour + 6);
+      const endStamp = `${yr}${mo}${dy}T${pad2(endHour)}${pad2(startMin)}00`;
+
+      const ua = navigator.userAgent || "";
+      const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+      const icsContent = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Ariella VIP Birthday//EN",
+        "BEGIN:VEVENT",
+        `DTSTART:${startStamp}`,
+        `DTEND:${endStamp}`,
+        `SUMMARY:${title}`,
+        `LOCATION:${location}`,
+        `DESCRIPTION:${details}`,
+        "BEGIN:VALARM",
+        "TRIGGER:-PT2H",
+        "ACTION:DISPLAY",
+        "DESCRIPTION:Reminder",
+        "END:VALARM",
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ].join("\r\n");
+
+      if (isIOS) {
+        const dataUri = "data:text/calendar;charset=utf-8," + encodeURIComponent(icsContent);
+        window.location.href = dataUri;
+        return;
+      }
+
+      const gCalUrl =
+        `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+        `&text=${encodeURIComponent(title)}` +
+        `&dates=${startStamp}/${endStamp}` +
+        `&location=${encodeURIComponent(location)}` +
+        `&details=${encodeURIComponent(details)}`;
+
+      window.open(gCalUrl, "_blank", "noopener,noreferrer");
+    }
+
+    // =========================================================================
+    // 8. FULL-HEIGHT CUSTOMIZED VIP INVITATION PNG GENERATOR
+    // =========================================================================
+    function isInAppSocialBrowser() {
+      const ua = navigator.userAgent || "";
+      return /Instagram|FBAN|FBAV|Snapchat|TikTok|Line/i.test(ua);
+    }
+
+    function loadSafeImageForCanvas(src) {
+      return new Promise((resolve) => {
+        if (!src) return resolve(null);
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = () => resolve(null);
+        img.src = src;
+      });
+    }
+
+    function drawCanvasRoundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    async function downloadInvitationCardImage() {
+      showToast("Generating your custom VIP Pass PNG... ✨", 2000);
+      const guestLabel = (currentGuestName || "VIP GUEST").trim().toUpperCase();
+      const safeFileSlug = normalizeGuestKey(currentGuestName || "VIP_Guest");
+      lastGeneratedVipFilename = `Ariella-17th-Birthday-VIP-Pass-${safeFileSlug}.png`;
+
+      const rules = Array.isArray(partyConfig.houseRules) && partyConfig.houseRules.length
+        ? partyConfig.houseRules
+        : DEFAULT_PARTY_CONFIG.houseRules;
+
+      const width = 900;
+      const band1Height = 960;
+      const band2Height = 440 + rules.length * 42;
+      const band3Height = 160;
+      const totalHeight = band1Height + band2Height + band3Height;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = totalHeight;
+      const ctx = canvas.getContext("2d");
+
+      // BAND 1: Cream Top Background
+      const creamGrad = ctx.createLinearGradient(0, 0, 0, band1Height);
+      creamGrad.addColorStop(0, "#FFFDFD");
+      creamGrad.addColorStop(1, "#FDF4F7");
+      ctx.fillStyle = creamGrad;
+      ctx.fillRect(0, 0, width, band1Height);
+
+      // Hanging Disco Strings & Balls
+      ctx.strokeStyle = "#D8B4BE";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(110, 0);
+      ctx.lineTo(110, 68);
+      ctx.moveTo(width - 110, 0);
+      ctx.lineTo(width - 110, 92);
+      ctx.stroke();
+
+      ctx.font = "44px serif";
+      ctx.textAlign = "center";
+      ctx.fillText("🪩", 110, 106);
+      ctx.fillText("🪩", width - 110, 130);
+
+      // Customized VIP Guest Pill
+      const pillText = `✦ VIP GUEST: ${guestLabel} ✦`;
+      ctx.font = "bold 20px sans-serif";
+      const pillW = Math.min(width - 260, Math.max(360, ctx.measureText(pillText).width + 64));
+      drawCanvasRoundRect(ctx, (width - pillW) / 2, 42, pillW, 48, 24);
+      ctx.fillStyle = "#FAF4F5";
+      ctx.fill();
+      ctx.strokeStyle = "#E5DADA";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = "#7D3648";
+      ctx.fillText(pillText, width / 2, 73);
+
+      // Header & Host Title
+      ctx.fillStyle = "#A85568";
+      ctx.font = "bold 22px sans-serif";
+      ctx.fillText("Y O U   A R E   I N V I T E D   T O", width / 2, 146);
+
+      ctx.fillStyle = "#8E3B50";
+      ctx.font = "italic bold 108px Georgia, serif";
+      ctx.fillText(partyConfig.hostName || "Ariella’s", width / 2, 244);
+
+      ctx.fillStyle = "#3B282C";
+      ctx.font = "bold 38px Georgia, serif";
+      ctx.fillText(partyConfig.subtitle || "17th Birthday Party!", width / 2, 296);
+
+      // Big 17 + Pink Vinyl Record
+      ctx.fillStyle = "#8E3B50";
+      ctx.font = "bold 112px Georgia, serif";
+      ctx.fillText(partyConfig.age || "17", width / 2 - 48, 405);
+
+      const vX = width / 2 + 66;
+      const vY = 368;
+      const vGrad = ctx.createRadialGradient(vX, vY, 8, vX, vY, 44);
+      vGrad.addColorStop(0, "#E5A4B4");
+      vGrad.addColorStop(0.6, "#A85568");
+      vGrad.addColorStop(1, "#7D3648");
+      ctx.beginPath();
+      ctx.arc(vX, vY, 44, 0, Math.PI * 2);
+      ctx.fillStyle = vGrad;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(vX, vY, 13, 0, Math.PI * 2);
+      ctx.fillStyle = "#FFFDFD";
+      ctx.fill();
+
+      // Date Row
+      ctx.strokeStyle = "#E5DADA";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(110, 442);
+      ctx.lineTo(width - 110, 442);
+      ctx.moveTo(110, 526);
+      ctx.lineTo(width - 110, 526);
+      ctx.stroke();
+
+      ctx.fillStyle = "#3B282C";
+      ctx.font = "bold 26px sans-serif";
+      ctx.textAlign = "right";
+      ctx.fillText((partyConfig.dayOfWeek || "SATURDAY").toUpperCase(), width / 2 - 82, 493);
+
+      ctx.strokeStyle = "#A85568";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(width / 2 - 58, 456);
+      ctx.lineTo(width / 2 - 58, 512);
+      ctx.moveTo(width / 2 + 58, 456);
+      ctx.lineTo(width / 2 + 58, 512);
+      ctx.stroke();
+
+      ctx.fillStyle = "#8E3B50";
+      ctx.font = "bold 52px Georgia, serif";
+      ctx.textAlign = "center";
+      ctx.fillText(partyConfig.dayNum || "21", width / 2, 502);
+
+      ctx.fillStyle = "#3B282C";
+      ctx.font = "bold 24px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText((partyConfig.month || "NOVEMBER").toUpperCase(), width / 2 + 82, 480);
+      ctx.fillStyle = "#78716C";
+      ctx.fillText(partyConfig.year || "2026", width / 2 + 82, 510);
+
+      // Tagline
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#4A2C33";
+      ctx.font = "italic 27px Georgia, serif";
+      ctx.fillText(
+        partyConfig.tagline || "Let’s celebrate, make memories, and have a day to remember!",
+        width / 2,
+        574
+      );
+
+      // Tilted Polaroid Snapshot + Pink Washi Tape
+      const polSrc = document.getElementById("polaroidPhotoImg")?.currentSrc || "Polaroid.JPG";
+      const polImg = await loadSafeImageForCanvas(polSrc);
+      ctx.save();
+      ctx.translate(width / 2, 765);
+      ctx.rotate((-2 * Math.PI) / 180);
+
+      ctx.shadowColor = "rgba(59, 40, 44, 0.18)";
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 10;
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(-155, -165, 310, 345);
+      ctx.shadowColor = "transparent";
+
+      if (polImg && polImg.naturalWidth > 0) {
+        const sMin = Math.min(polImg.naturalWidth, polImg.naturalHeight);
+        const sx = (polImg.naturalWidth - sMin) / 2;
+        const sy = (polImg.naturalHeight - sMin) / 2;
+        ctx.drawImage(polImg, sx, sy, sMin, sMin, -137, -147, 274, 274);
+      } else {
+        ctx.fillStyle = "#F7E8EC";
+        ctx.fillRect(-137, -147, 274, 274);
+      }
+
+      // Washi tape
+      ctx.fillStyle = "rgba(229, 164, 180, 0.8)";
+      ctx.fillRect(-55, -180, 110, 28);
+
+      ctx.fillStyle = "#7D3648";
+      ctx.font = "italic bold 24px Georgia, serif";
+      ctx.fillText(partyConfig.polaroidCaption || "Young & Sweet, Only 17 ✨", 0, 160);
+      ctx.restore();
+
+      // BAND 2: Full-Width Pink Venue, Time, Dress Code & House Rules Band
+      let yCursor = band1Height;
+      ctx.fillStyle = "#A85568";
+      ctx.fillRect(0, yCursor, width, 12);
+      yCursor += 12;
+
+      ctx.fillStyle = "#F9E8ED";
+      ctx.fillRect(0, yCursor, width, band2Height - 24);
+
+      // Time & Dress Code Cards
+      drawCanvasRoundRect(ctx, 70, yCursor + 34, 365, 108, 22);
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.fill();
+      ctx.strokeStyle = "#E5CBD3";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      drawCanvasRoundRect(ctx, 465, yCursor + 34, 365, 108, 22);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#A85568";
+      ctx.font = "bold 18px sans-serif";
+      ctx.fillText("⏰ TIME", 252, yCursor + 72);
+      ctx.fillText("🧸 DRESS CODE", 647, yCursor + 72);
+
+      ctx.fillStyle = "#3B282C";
+      ctx.font = "bold 24px sans-serif";
+      ctx.fillText(partyConfig.time || "15.00 PM - onwards", 252, yCursor + 112);
+      ctx.fillText(partyConfig.dressCode || "Cute Pyjamas", 647, yCursor + 112);
+
+      // Location & Street Address
+      ctx.fillStyle = "#A85568";
+      ctx.font = "bold 18px sans-serif";
+      ctx.fillText("📍 LOCATION", width / 2, yCursor + 190);
+
+      ctx.fillStyle = "#7D3648";
+      ctx.font = "bold 40px Georgia, serif";
+      ctx.fillText(partyConfig.venue || "Game House", width / 2, yCursor + 236);
+
+      ctx.fillStyle = "#3B282C";
+      ctx.font = "bold 24px sans-serif";
+      ctx.fillText(partyConfig.venueAddress || "3324 Rue Catherine", width / 2, yCursor + 272);
+
+      // House Rules List
+      ctx.fillStyle = "#A85568";
+      ctx.font = "bold 18px sans-serif";
+      ctx.fillText("📜 HOUSE RULES", width / 2, yCursor + 332);
+
+      ctx.fillStyle = "#3B282C";
+      ctx.font = "600 23px sans-serif";
+      let ruleY = yCursor + 374;
+      rules.forEach((rule) => {
+        ctx.fillText(`✦ ${rule}`, width / 2, ruleY);
+        ruleY += 40;
+      });
+
+      yCursor += band2Height - 12;
+      ctx.fillStyle = "#A85568";
+      ctx.fillRect(0, yCursor, width, 12);
+      yCursor += 12;
+
+      // BAND 3: Double-Bordered "Waiting for you 😚" Footer
+      ctx.fillStyle = "#FFFDFD";
+      ctx.fillRect(0, yCursor, width, band3Height);
+
+      drawCanvasRoundRect(ctx, 70, yCursor + 26, width - 140, 106, 22);
+      ctx.strokeStyle = "#DFB8C3";
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      drawCanvasRoundRect(ctx, 78, yCursor + 34, width - 156, 90, 18);
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = "#8E3B50";
+      ctx.font = "italic bold 38px Georgia, serif";
+      ctx.fillText("Waiting for you 😚", width / 2, yCursor + 90);
+
+      // Convert canvas to PNG DataURL & Blob
+      try {
+        lastGeneratedVipDataUrl = canvas.toDataURL("image/png");
+      } catch (e) {
+        showToast("Could not export image due to browser security settings.");
+        return;
+      }
+
+      canvas.toBlob((blob) => {
+        lastGeneratedVipBlob = blob;
+        const previewImg = document.getElementById("vipGeneratedPreviewImg");
+        if (previewImg) previewImg.src = lastGeneratedVipDataUrl;
+        const modal = document.getElementById("vipImageSaveModal");
+        if (modal) {
+          modal.classList.remove("hidden");
+          modal.classList.add("flex");
+        }
+        if (!isInAppSocialBrowser()) {
+          handleDirectVipDownloadClick();
+        }
+      }, "image/png");
+    }
+
+    function closeVipImageSaveModal() {
+      const modal = document.getElementById("vipImageSaveModal");
+      if (modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+    }
+
+    function handleDirectVipDownloadClick() {
+      if (!lastGeneratedVipDataUrl) return;
+      const a = document.createElement("a");
+      a.href = lastGeneratedVipDataUrl;
+      a.download = lastGeneratedVipFilename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast("VIP Pass PNG saved! 📸");
+    }
+
+    async function shareOrSaveVipPassFile() {
+      if (lastGeneratedVipBlob && navigator.canShare) {
+        try {
+          const file = new File([lastGeneratedVipBlob], lastGeneratedVipFilename, { type: "image/png" });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: "Ariella's 17th Birthday VIP Pass"
+            });
+            return;
+          }
+        } catch (e) {}
+      }
+      handleDirectVipDownloadClick();
+    }
+
+    // =========================================================================
+    // 9. HOST MODE LOCK/UNLOCK, SECRET DISCO BALL & HOST COMMAND CENTER
+    // =========================================================================
+    function handleSecretDiscoTap() {
+      secretDiscoTapCount += 1;
+      clearTimeout(secretDiscoTapTimer);
+      secretDiscoTapTimer = setTimeout(() => {
+        secretDiscoTapCount = 0;
+      }, 900);
+      if (secretDiscoTapCount >= 3) {
+        secretDiscoTapCount = 0;
+        openPinModal();
+      }
+    }
+
+    function openPinModal() {
+      const modal = document.getElementById("pinModal");
+      if (modal) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        const input = document.getElementById("hostPinInput");
+        if (input) {
+          input.value = "";
+          input.focus();
+        }
+      }
+    }
+
+    function closePinModal() {
+      const modal = document.getElementById("pinModal");
+      if (modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+    }
+
+    function submitHostPin() {
+      const entered = (document.getElementById("hostPinInput")?.value || "").trim();
+      const expected = String(partyConfig.hostPin || "2009").trim();
+      if (entered === expected) {
+        closePinModal();
+        unlockHostModePermanentlyOnDevice();
+        showToast("👑 Host Mode unlocked on this device!");
+      } else {
+        showToast("Incorrect Host PIN ❌");
+      }
+    }
+
+    function unlockHostModePermanentlyOnDevice() {
+      isHostUnlocked = true;
+      try {
+        localStorage.setItem(HOST_UNLOCKED_STORAGE_KEY, "true");
+      } catch (e) {}
+      updateHostLockUI();
+      showHostCommandCenter();
+    }
+
+    function lockHostMode() {
+      isHostUnlocked = false;
+      try {
+        localStorage.removeItem(HOST_UNLOCKED_STORAGE_KEY);
+      } catch (e) {}
+      updateHostLockUI();
+      resetToLanding();
+      showToast("🔒 Host Mode locked — switched back to Guest View");
+    }
+
+    function initHostLockState() {
+      const params = new URLSearchParams(window.location.search);
+      const hash = (window.location.hash || "").toLowerCase();
+      const explicitHost = params.get("host") === "1" || hash.includes("host");
+
+      let storedHost = false;
+      try {
+        storedHost = localStorage.getItem(HOST_UNLOCKED_STORAGE_KEY) === "true";
+      } catch (e) {}
+
+      if (explicitHost || storedHost) {
+        isHostUnlocked = true;
+        try {
+          localStorage.setItem(HOST_UNLOCKED_STORAGE_KEY, "true");
+        } catch (e) {}
+      } else {
+        isHostUnlocked = false;
+      }
+
+      updateHostLockUI();
+      if (isHostUnlocked) {
+        showHostCommandCenter();
+      }
+    }
+
+    function updateHostLockUI() {
+      const adminBar = document.getElementById("hostAdminBar");
+      const cmdCenter = document.getElementById("hostCommandCenter");
+      const loginBtn = document.getElementById("hostLoginBtn");
+      const sandboxBadge = document.getElementById("sandboxBadge");
+
+      if (adminBar) {
+        adminBar.classList.toggle("hidden", !isHostUnlocked);
+        adminBar.classList.toggle("flex", isHostUnlocked);
+      }
+      if (cmdCenter) {
+        cmdCenter.classList.toggle("hidden", !isHostUnlocked);
+      }
+      if (loginBtn) {
+        loginBtn.classList.toggle("hidden", isHostUnlocked);
+      }
+      if (sandboxBadge) {
+        sandboxBadge.classList.toggle("hidden", !IS_SANDBOX);
+      }
+    }
+
+    function showHostCommandCenter() {
+      document.getElementById("hostCommandCenter")?.classList.remove("hidden");
+      document.getElementById("part1QuizSection")?.classList.add("hidden");
+      document.getElementById("part2DiscoSection")?.classList.add("hidden");
+      renderHostRsvpList();
+    }
+
+    function previewGuestExperience() {
+      document.getElementById("hostCommandCenter")?.classList.add("hidden");
+      resetToLanding();
+    }
+
+    function copyTextToClipboard(text, successMsg) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showToast(successMsg);
+      } catch (e) {
+        showToast("Copy failed — copy the URL from your address bar.");
+      }
+      document.body.removeChild(ta);
+    }
+
+    function getCleanBaseUrl() {
+      return `${window.location.origin}${window.location.pathname}`;
+    }
+
+    function copyGuestLink() {
+      copyTextToClipboard(getCleanBaseUrl(), "🔗 Guest Link copied! Ready to send to friends.");
+    }
+
+    function copyHostLink() {
+      copyTextToClipboard(`${getCleanBaseUrl()}?host=1`, "🔖 Host Edit Link copied!");
+    }
+
+    // =========================================================================
+    // 10. HOST RSVP MANAGEMENT, LIVE POP-UP ALERTS & ADD RSVP MODAL
+    // =========================================================================
+    function renderHostRsvpList() {
+      const container = document.getElementById("hostRsvpListContainer");
+      if (!container) return;
+
+      const search = (document.getElementById("resultsSearchInput")?.value || "").trim().toLowerCase();
+      const filter = document.getElementById("resultsStatusFilter")?.value || "all";
+
+      let pendingCount = 0;
+      let confirmedCount = 0;
+      let declinedCount = 0;
+      let totalHeadcount = 0;
+
+      guestResponses.forEach((r) => {
+        if (r.status === "pending") pendingCount += 1;
+        else if (r.status === "declined") declinedCount += 1;
+        else {
+          confirmedCount += 1;
+          const hasPlusOne =
+            Boolean((r.plusOne || "").trim()) ||
+            (Array.isArray(r.answers) && r.answers[0] && r.answers[0].toLowerCase().includes("+1"));
+          totalHeadcount += hasPlusOne ? 2 : 1;
+        }
+      });
+
+      document.getElementById("statPending").textContent = pendingCount;
+      document.getElementById("statConfirmed").textContent = confirmedCount;
+      document.getElementById("statDeclined").textContent = declinedCount;
+      document.getElementById("statHeadcount").textContent = totalHeadcount;
+      const topBadge = document.getElementById("hostTopPendingCount");
+      if (topBadge) topBadge.textContent = pendingCount;
+
+      const filtered = guestResponses.filter((r) => {
+        if (filter !== "all" && r.status !== filter) return false;
+        if (search && !String(r.name || "").toLowerCase().includes(search)) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-xs text-stone-400">No guests match this filter yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = "";
+      filtered.forEach((r) => {
+        const card = document.createElement("div");
+        card.className = "p-4 rounded-2xl bg-[#FAF4F5] border border-[#E5DADA] space-y-2";
+
+        const badgeClass =
+          r.status === "pending"
+            ? "bg-amber-100 text-amber-800"
+            : r.status === "declined"
+            ? "bg-rose-100 text-rose-800"
+            : "bg-emerald-100 text-emerald-800";
+        const badgeText =
+          r.status === "pending"
+            ? "⏳ Pending Approval"
+            : r.status === "declined"
+            ? "❌ Declined"
+            : "✅ Confirmed";
+
+        const answersHtml = Array.isArray(r.answers)
+          ? r.answers
+              .map((ans, idx) => `<span class="inline-block px-2 py-0.5 rounded-lg bg-white border border-[#E5DADA] text-[11px] text-stone-700">Q${idx + 1}: ${escapeHtml(ans)}</span>`)
+              .join(" ")
+          : "";
+
+        const plusOneHtml = r.plusOne
+          ? `<div class="text-[11px] font-bold text-[#A85568]">👯‍♀️ +1 Name: ${escapeHtml(r.plusOne)}</div>`
+          : "";
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between gap-2">
+            <div class="font-bold text-sm text-[#3B282C]">${escapeHtml(r.name)}</div>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${badgeClass}">${badgeText}</span>
+          </div>
+          ${plusOneHtml}
+          <div class="flex flex-wrap gap-1">${answersHtml}</div>
+          <div class="flex flex-wrap items-center gap-1.5 pt-1">
+            ${
+              r.status !== "confirmed"
+                ? `<button type="button" onclick="updateGuestDecision('${r.id}', 'confirmed')" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold transition">✅ Accept</button>`
+                : ""
+            }
+            ${
+              r.status !== "declined"
+                ? `<button type="button" onclick="updateGuestDecision('${r.id}', 'declined')" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold transition">❌ Refuse</button>`
+                : ""
+            }
+            <button type="button" onclick="deleteGuestRsvp('${r.id}')" class="ml-auto px-2.5 py-1.5 rounded-xl bg-white border border-[#E5DADA] text-stone-500 hover:text-rose-600 text-[11px] font-bold transition">🗑️ Delete</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    async function updateGuestDecision(guestId, newStatus) {
+      const updated = guestResponses.map((r) =>
+        r.id === guestId ? { ...r, status: newStatus, updatedAt: Date.now() } : r
+      );
+      saveLocalRsvps(updated);
+      renderHostRsvpList();
+      await pushMasterStateToCloud();
+      showToast(newStatus === "confirmed" ? "✅ Guest approved & notified!" : "❌ Request declined.");
+    }
+
+    async function deleteGuestRsvp(guestId) {
+      deletedGuestIds.add(guestId);
+      saveDeletedIds();
+      const remaining = guestResponses.filter((r) => r.id !== guestId);
+      saveLocalRsvps(remaining);
+      renderHostRsvpList();
+      await pushMasterStateToCloud();
+      showToast("🗑️ Guest removed from list.");
+    }
+
+    function checkForNewPendingHostPopup() {
+      const pendingGuests = guestResponses.filter((r) => r.status === "pending");
+      const freshGuest = pendingGuests.find((g) => !knownPendingIds.has(g.id));
+      pendingGuests.forEach((g) => knownPendingIds.add(g.id));
+
+      if (freshGuest) {
+        currentLivePopupGuestId = freshGuest.id;
+        playNotificationChime();
+        const nameEl = document.getElementById("liveReqGuestName");
+        const sumEl = document.getElementById("liveReqSummary");
+        if (nameEl) nameEl.textContent = freshGuest.name;
+        if (sumEl) {
+          const ansList = Array.isArray(freshGuest.answers) ? freshGuest.answers.join(" • ") : "";
+          sumEl.textContent = ansList || "Submitted a new VIP request!";
+        }
+        const acceptBtn = document.getElementById("liveReqAcceptBtn");
+        const refuseBtn = document.getElementById("liveReqRefuseBtn");
+        if (acceptBtn) {
+          acceptBtn.onclick = () => {
+            closeHostLiveRequestModal();
+            updateGuestDecision(freshGuest.id, "confirmed");
+          };
+        }
+        if (refuseBtn) {
+          refuseBtn.onclick = () => {
+            closeHostLiveRequestModal();
+            updateGuestDecision(freshGuest.id, "declined");
+          };
+        }
+
+        const modal = document.getElementById("hostLiveRequestModal");
+        if (modal) {
+          modal.classList.remove("hidden");
+          modal.classList.add("flex");
+        }
+      }
+    }
+
+    function closeHostLiveRequestModal() {
+      const modal = document.getElementById("hostLiveRequestModal");
+      if (modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+    }
+
+    async function enableHostPhoneAlerts() {
+      if (!("Notification" in window)) {
+        showToast("Live pop-up alerts are active on this page! 🔔");
+        return;
+      }
+      try {
+        const perm = await Notification.requestPermission();
+        if (perm === "granted") {
+          const btn = document.getElementById("hostAlertToggleBtn");
+          if (btn) btn.textContent = "🔔 Alerts On";
+          showToast("Host phone alerts enabled! 🔔");
+        } else {
+          showToast("Pop-up alerts active while page is open!");
+        }
+      } catch (e) {}
+    }
+
+    function formatGuestSentence(r) {
+      const ans = Array.isArray(r.answers) ? r.answers.join(" | ") : "";
+      const plus = r.plusOne ? ` (+1: ${r.plusOne})` : "";
+      return `${r.name}${plus} [${r.status.toUpperCase()}]: ${ans}`;
+    }
+
+    function copyResultsSummary() {
+      if (!guestResponses.length) {
+        showToast("No RSVPs to copy yet!");
+        return;
+      }
+      const lines = guestResponses.map(formatGuestSentence).join("\n");
+      copyTextToClipboard(lines, "📋 Guest summary copied to clipboard!");
+    }
+
+    function downloadResultsCsv() {
+      if (!guestResponses.length) {
+        showToast("No RSVPs to export yet!");
+        return;
+      }
+      const header = ["Name", "Status", "+1 Name", "Q1", "Q2", "Q3", "Q4"];
+      const rows = guestResponses.map((r) => {
+        const a = Array.isArray(r.answers) ? r.answers : [];
+        return [r.name, r.status, r.plusOne || "", a[0] || "", a[1] || "", a[2] || "", a[3] || ""]
+          .map((cell) => `"${String(cell).replace(/"/g, '""')}"`)
+          .join(",");
+      });
+      const csv = [header.join(","), ...rows].join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Ariella-17th-Birthday-RSVPs.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("📥 CSV exported!");
+    }
+
+    // Add RSVP Modal
+    function openAddRsvpModal() {
+      const container = document.getElementById("manualRsvpQuestionsContainer");
+      if (container) {
+        container.innerHTML = "";
+        (partyConfig.questions || DEFAULT_PARTY_CONFIG.questions).forEach((qObj, idx) => {
+          const div = document.createElement("div");
+          const opts = (qObj.options || [])
+            .map((o) => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`)
+            .join("");
+          div.innerHTML = `
+            <label class="block text-[11px] font-bold text-[#7D3648] mb-1">${escapeHtml(qObj.question)}</label>
+            <select id="manualQ_${idx}" class="w-full px-3 py-2 rounded-xl bg-[#FAF4F5] border border-[#E5DADA] text-xs font-medium">
+              ${opts}
+            </select>
+          `;
+          container.appendChild(div);
+        });
+      }
+      document.getElementById("manualRsvpName").value = "";
+      document.getElementById("manualRsvpPlusOne").value = "";
+      const modal = document.getElementById("addRsvpModal");
+      if (modal) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+      }
+    }
+
+    function closeAddRsvpModal() {
+      const modal = document.getElementById("addRsvpModal");
+      if (modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+    }
+
+    async function saveManualRsvp() {
+      const name = (document.getElementById("manualRsvpName")?.value || "").trim();
+      if (!name) {
+        showToast("Please enter the guest's name!");
+        return;
+      }
+      const status = document.getElementById("manualRsvpStatus")?.value || "confirmed";
+      const plusOne = (document.getElementById("manualRsvpPlusOne")?.value || "").trim();
+      const questions = partyConfig.questions || DEFAULT_PARTY_CONFIG.questions;
+      const answers = questions.map((_, idx) => document.getElementById(`manualQ_${idx}`)?.value || "");
+
+      const id = `guest_${normalizeGuestKey(name)}`;
+      deletedGuestIds.delete(id);
+      saveDeletedIds();
+
+      const entry = {
+        id,
+        name,
+        status,
+        answers,
+        plusOne,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+
+      const updated = mergeResponsesList(guestResponses, [entry]);
+      saveLocalRsvps(updated);
+      closeAddRsvpModal();
+      renderHostRsvpList();
+      await pushMasterStateToCloud();
+      showToast(`✅ Added ${name} to the guest list!`);
+    }
+
+    // Settings Modal
+    function openSettingsModal() {
+      document.getElementById("setDayOfWeek").value = partyConfig.dayOfWeek || "SATURDAY";
+      document.getElementById("setDayNum").value = partyConfig.dayNum || "21";
+      document.getElementById("setMonth").value = partyConfig.month || "NOVEMBER";
+      document.getElementById("setYear").value = partyConfig.year || "2026";
+      document.getElementById("setTime").value = partyConfig.time || "15.00 PM - onwards";
+      document.getElementById("setDressCode").value = partyConfig.dressCode || "Cute Pyjamas";
+      document.getElementById("setVenue").value = partyConfig.venue || "Game House";
+      document.getElementById("setAddress").value = partyConfig.venueAddress || "3324 Rue Catherine";
+      document.getElementById("setHouseRules").value = (partyConfig.houseRules || []).join("\n");
+      document.getElementById("setHostPin").value = partyConfig.hostPin || "2009";
+
+      const modal = document.getElementById("settingsModal");
+      if (modal) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+      }
+    }
+
+    function closeSettingsModal() {
+      const modal = document.getElementById("settingsModal");
+      if (modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+    }
+
+    function savePartySettings() {
+      partyConfig.dayOfWeek = document.getElementById("setDayOfWeek").value.trim() || "SATURDAY";
+      partyConfig.dayNum = document.getElementById("setDayNum").value.trim() || "21";
+      partyConfig.month = document.getElementById("setMonth").value.trim() || "NOVEMBER";
+      partyConfig.year = document.getElementById("setYear").value.trim() || "2026";
+      partyConfig.time = document.getElementById("setTime").value.trim() || "15.00 PM - onwards";
+      partyConfig.dressCode = document.getElementById("setDressCode").value.trim() || "Cute Pyjamas";
+      partyConfig.venue = document.getElementById("setVenue").value.trim() || "Game House";
+      partyConfig.venueAddress = document.getElementById("setAddress").value.trim() || "3324 Rue Catherine";
+      partyConfig.houseRules = document
+        .getElementById("setHouseRules")
+        .value.split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      partyConfig.hostPin = document.getElementById("setHostPin").value.trim() || "2009";
+
+      savePartyConfig();
+      applyConfigToUI();
+      closeSettingsModal();
+      showToast("⚙️ Party details updated!");
+    }
+
+    function applyConfigToUI() {
+      const niceMonth =
+        (partyConfig.month || "NOVEMBER").charAt(0).toUpperCase() +
+        (partyConfig.month || "NOVEMBER").slice(1).toLowerCase();
+      const niceDay =
+        (partyConfig.dayOfWeek || "SATURDAY").charAt(0).toUpperCase() +
+        (partyConfig.dayOfWeek || "SATURDAY").slice(1).toLowerCase();
+
+      const quizPill = document.getElementById("quizDatePreview");
+      if (quizPill) {
+        quizPill.textContent = `${niceDay}, ${niceMonth} ${partyConfig.dayNum}, ${partyConfig.year} • ${partyConfig.time}`;
+      }
+
+      const setTxt = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+      };
+      setTxt("cardHostTitle", partyConfig.hostName || "Ariella’s");
+      setTxt("cardSubtitle", partyConfig.subtitle || "17th Birthday Party!");
+      setTxt("cardAgeBadge", partyConfig.age || "17");
+      setTxt("cardDayOfWeek", (partyConfig.dayOfWeek || "SATURDAY").toUpperCase());
+      setTxt("cardDayNum", partyConfig.dayNum || "21");
+      setTxt("cardMonth", (partyConfig.month || "NOVEMBER").toUpperCase());
+      setTxt("cardYear", partyConfig.year || "2026");
+      setTxt("cardTagline", partyConfig.tagline || "Let’s celebrate, make memories, and have a day to remember!");
+      setTxt("cardPolaroidCaption", partyConfig.polaroidCaption || "Young & Sweet, Only 17 ✨");
+      setTxt("cardTimeDisplay", partyConfig.time || "15.00 PM - onwards");
+      setTxt("cardDressCodeDisplay", partyConfig.dressCode || "Cute Pyjamas");
+      setTxt("cardVenueDisplay", partyConfig.venue || "Game House");
+      setTxt("cardAddressDisplay", partyConfig.venueAddress || "3324 Rue Catherine");
+
+      const rulesUl = document.getElementById("cardHouseRulesList");
+      if (rulesUl) {
+        rulesUl.innerHTML = (partyConfig.houseRules || DEFAULT_PARTY_CONFIG.houseRules)
+          .map((r) => `<li>✦ ${escapeHtml(r)}</li>`)
+          .join("");
+      }
+    }
+
+    // =========================================================================
+    // 11. INITIALIZATION & AUTOMATIC BACKGROUND SYNC
+    // =========================================================================
+    window.addEventListener("DOMContentLoaded", () => {
+      guestResponses.filter((r) => r.status === "pending").forEach((r) => knownPendingIds.add(r.id));
+      applyConfigToUI();
+      initHostLockState();
+      syncAllCloudSources(false);
+
+      setInterval(() => {
+        syncAllCloudSources(false);
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
